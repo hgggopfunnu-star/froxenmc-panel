@@ -7,9 +7,21 @@
 <body style="background:black;color:white;text-align:center">
 
 <h1>FroxenMC Hosting Panel</h1>
-<p>Free Minecraft Hosting</p>
 
-<button>Create Server</button>
+<button onclick="login()">Login</button>
+<button onclick="create()">Create Server</button>
+
+<p id="text"></p>
+
+<script>
+function login(){
+document.getElementById("text").innerHTML="Logged in!";
+}
+
+function create(){
+document.getElementById("text").innerHTML="Server created (fake)";
+}
+</script>
 
 </body>
 </html>
