@@ -6,21 +6,35 @@
 
 <body style="background:black;color:white;text-align:center">
 
-<h1>FroxenMC Hosting Panel</h1>
+<h1>FroxenMC Hosting</h1>
 
+<div id="home">
 <button onclick="login()">Login</button>
-<button onclick="create()">Create Server</button>
+</div>
 
-<p id="text"></p>
+<div id="panel" style="display:none">
+<h2>Dashboard</h2>
+<button onclick="create()">Create Server</button>
+<button onclick="logout()">Logout</button>
+<p id="servers"></p>
+</div>
 
 <script>
+
 function login(){
-document.getElementById("text").innerHTML="Logged in!";
+document.getElementById("home").style.display="none";
+document.getElementById("panel").style.display="block";
+}
+
+function logout(){
+document.getElementById("home").style.display="block";
+document.getElementById("panel").style.display="none";
 }
 
 function create(){
-document.getElementById("text").innerHTML="Server created (fake)";
+document.getElementById("servers").innerHTML += "<br>Server created";
 }
+
 </script>
 
 </body>
