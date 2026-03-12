@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -16,6 +17,7 @@ body {
     color: white;
 }
 
+
 /* ---------- LOGIN ---------- */
 
 #login {
@@ -25,14 +27,15 @@ body {
     justify-content: center;
 }
 
-/* ---------- LAYOUT ---------- */
+
+/* ---------- SIDEBAR ---------- */
 
 #side {
     display: none;
     position: fixed;
     left: 0;
     top: 0;
-    width: 200px;
+    width: 220px;
     height: 100vh;
     background: #111827;
     padding: 20px;
@@ -52,13 +55,15 @@ body {
     background: #374151;
 }
 
+
 /* ---------- MAIN ---------- */
 
 #main {
     display: none;
-    margin-left: 220px;
+    margin-left: 240px;
     padding: 20px;
 }
+
 
 /* ---------- PAGES ---------- */
 
@@ -70,6 +75,9 @@ body {
     display: block;
 }
 
+
+/* ---------- CARD ---------- */
+
 .card {
     background: #1f2937;
     padding: 15px;
@@ -77,9 +85,33 @@ body {
     margin-bottom: 15px;
 }
 
+
+/* ---------- SERVER LIST ---------- */
+
+.server {
+    background: #111827;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.server button {
+    margin-right: 5px;
+    padding: 6px 10px;
+    border: none;
+    background: #374151;
+    color: white;
+    cursor: pointer;
+}
+
+.server button:hover {
+    background: #4b5563;
+}
+
 </style>
 
 </head>
+
 <body>
 
 
@@ -89,12 +121,13 @@ body {
 <div id="login">
 
     <div class="card">
+
         <h2>FroxenMC Panel Login</h2>
 
-        <!-- Google button here -->
-        <div id="g_id_onload"
-             data-client_id="265090568809-5rrmcfev60sqs3qmke5ot09e877ucgud.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse">
+        <div
+            id="g_id_onload"
+            data-client_id="265090568809-5rrmcfev60sqs3qmke5ot09e877ucgud.apps.googleusercontent.com"
+            data-callback="handleCredentialResponse">
         </div>
 
         <div class="g_id_signin"></div>
@@ -123,6 +156,10 @@ body {
 
 <div id="main">
 
+
+
+    <!-- DASHBOARD -->
+
     <div id="dashboard" class="page">
 
         <div class="card">
@@ -130,8 +167,32 @@ body {
             <p id="status">Checking backend...</p>
         </div>
 
+
+        <div class="card">
+
+            <h2>Your Servers</h2>
+
+            <div class="server">
+                <h3>Survival Server</h3>
+                <p>Status: Offline</p>
+                <button>Start</button>
+                <button>Stop</button>
+            </div>
+
+            <div class="server">
+                <h3>Test Server</h3>
+                <p>Status: Running</p>
+                <button>Start</button>
+                <button>Stop</button>
+            </div>
+
+        </div>
+
     </div>
 
+
+
+    <!-- CREATE -->
 
     <div id="create" class="page">
 
@@ -143,6 +204,9 @@ body {
     </div>
 
 
+
+    <!-- ACCOUNT -->
+
     <div id="account" class="page">
 
         <div class="card">
@@ -152,13 +216,16 @@ body {
 
     </div>
 
+
+
 </div>
 
 
 
 <script>
 
-function handleCredentialResponse(response){
+
+function handleCredentialResponse(response) {
 
     document.getElementById("login").style.display = "none";
     document.getElementById("side").style.display = "block";
@@ -168,40 +235,50 @@ function handleCredentialResponse(response){
 }
 
 
-function page(p){
 
-    document.getElementById("dashboard").style.display = "none";
-    document.getElementById("create").style.display = "none";
-    document.getElementById("account").style.display = "none";
+function page(p) {
+
+    const pages = ["dashboard", "create", "account"];
+
+    pages.forEach(id => {
+        document.getElementById(id).style.display = "none";
+    });
 
     document.getElementById(p).style.display = "block";
 
 }
 
 
-function checkBackend(){
+
+function checkBackend() {
+
+    const status = document.getElementById("status");
+
+    status.innerText = "Checking backend...";
 
     fetch("https://froxenmc-backend-production.up.railway.app/api/test")
-    .then(r => r.json())
-    .then(data => {
+        .then(r => r.json())
+        .then(data => {
 
-        document.getElementById("status").innerText =
-            "Backend: " + data.status;
+            status.innerText =
+                "Backend: " + data.status;
 
-    })
-    .catch(() => {
+        })
+        .catch(() => {
 
-        document.getElementById("status").innerText =
-            "Backend offline";
+            status.innerText =
+                "Backend offline";
 
-    });
+        });
 
 }
+
 
 </script>
 
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 
 </body>
 </html>
