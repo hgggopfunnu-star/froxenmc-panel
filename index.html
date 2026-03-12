@@ -4,32 +4,42 @@
 
 <title>FroxenMC Hosting</title>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <style>
 
 body{
-background:#0b0b0b;
+background:#0e0e0e;
 color:white;
 font-family:Arial;
-text-align:center;
+margin:0;
 }
 
-button{
-padding:6px;
-margin:3px;
-background:#009933;
-color:white;
-border:none;
-cursor:pointer;
+.top{
+background:#111;
+padding:10px;
 }
 
-.panel{
+.side{
+width:200px;
+height:100vh;
+background:#151515;
+float:left;
 display:none;
 }
 
-.server{
-border:1px solid white;
-margin:10px;
-padding:10px;
+.main{
+margin-left:200px;
+padding:20px;
+display:none;
+}
+
+button{
+background:#00aa55;
+border:none;
+padding:8px;
+color:white;
+cursor:pointer;
 }
 
 </style>
@@ -38,74 +48,104 @@ padding:10px;
 
 <body>
 
-<h1>FroxenMC Hosting</h1>
+<div class="top">
+FroxenMC Hosting Panel
+</div>
 
 
-<div id="login">
+<!-- LOGIN -->
 
-<h2>Login</h2>
+<div id="login" style="text-align:center;margin-top:50px;">
 
-<input id="user" placeholder="Username">
+<h2>Login with Google</h2>
 
-<br><br>
+<div id="g_id_onload"
+data-client_id="265090568809-5rrmcfev60sqs3qmke5ot09e877ucgud.apps.googleusercontent.com"
+data-callback="handleCredentialResponse">
+</div>
 
-<button onclick="login()">Login</button>
+<div class="g_id_signin"></div>
 
 </div>
 
 
 
-<div id="dashboard" class="panel">
+<!-- SIDE MENU -->
+
+<div class="side" id="side">
+
+<p>Menu</p>
+
+<button onclick="page('dashboard')">Dashboard</button>
+<br><br>
+
+<button onclick="page('create')">Create Server</button>
+<br><br>
+
+<button onclick="page('account')">Account</button>
+
+</div>
+
+
+
+<!-- MAIN -->
+
+<div class="main" id="main">
+
+
+<div id="dashboard">
 
 <h2>Dashboard</h2>
 
-<button onclick="showCreate()">Create Server</button>
-<button onclick="logout()">Logout</button>
-
-<h3 id="welcome"></h3>
-
-<div id="servers"></div>
+<p>Backend not connected yet</p>
 
 </div>
 
 
 
-<div id="create" class="panel">
+<div id="create" style="display:none">
 
 <h2>Create Server</h2>
 
-Name:
-<br>
-<input id="sname">
+Name<br>
+<input>
 
 <br><br>
 
-RAM:
-<br>
+RAM<br>
 
-<select id="ram">
+<select>
 <option>1GB</option>
 <option>2GB</option>
 <option>4GB</option>
-<option>8GB</option>
 </select>
 
 <br><br>
 
-Version:
-<br>
+Version<br>
 
-<select id="ver">
+<select>
 <option>Paper</option>
 <option>Spigot</option>
 <option>Vanilla</option>
-<option>Forge</option>
 </select>
 
 <br><br>
 
-<button onclick="createServer()">Create</button>
-<button onclick="back()">Back</button>
+<button>Create</button>
+
+</div>
+
+
+
+<div id="account" style="display:none">
+
+<h2>Account</h2>
+
+<p>Logged with Google</p>
+
+</div>
+
 
 </div>
 
@@ -113,149 +153,26 @@ Version:
 
 <script>
 
-let servers = [];
-
-let username = "";
-
-
-function login(){
-
-username = document.getElementById("user").value;
-
-if(username=="") return;
+function handleCredentialResponse(response){
 
 document.getElementById("login").style.display="none";
 
-document.getElementById("dashboard").style.display="block";
+document.getElementById("side").style.display="block";
 
-document.getElementById("welcome").innerHTML =
-"Welcome " + username;
+document.getElementById("main").style.display="block";
 
 }
 
 
-
-function logout(){
+function page(p){
 
 document.getElementById("dashboard").style.display="none";
-
-document.getElementById("login").style.display="block";
-
-}
-
-
-
-function showCreate(){
-
-document.getElementById("dashboard").style.display="none";
-
-document.getElementById("create").style.display="block";
-
-}
-
-
-
-function back(){
-
 document.getElementById("create").style.display="none";
+document.getElementById("account").style.display="none";
 
-document.getElementById("dashboard").style.display="block";
-
-}
-
-
-
-function createServer(){
-
-let name =
-document.getElementById("sname").value;
-
-let ram =
-document.getElementById("ram").value;
-
-let ver =
-document.getElementById("ver").value;
-
-if(name=="") return;
-
-servers.push({
-name:name,
-ram:ram,
-ver:ver,
-status:"Stopped"
-});
-
-updateServers();
-
-back();
+document.getElementById(p).style.display="block";
 
 }
-
-
-
-function start(i){
-
-servers[i].status = "Running";
-
-updateServers();
-
-}
-
-
-
-function stop(i){
-
-servers[i].status = "Stopped";
-
-updateServers();
-
-}
-
-
-
-function deleteServer(i){
-
-servers.splice(i,1);
-
-updateServers();
-
-}
-
-
-
-function updateServers(){
-
-let list = "";
-
-for(let i=0;i<servers.length;i++){
-
-let s = servers[i];
-
-list +=
-"<div class='server'>"
-+
-"<b>"+s.name+"</b><br>"
-+
-"RAM: "+s.ram+"<br>"
-+
-"Type: "+s.ver+"<br>"
-+
-"Status: "+s.status+"<br><br>"
-+
-"<button onclick='start("+i+")'>Start</button>"
-+
-"<button onclick='stop("+i+")'>Stop</button>"
-+
-"<button onclick='deleteServer("+i+")'>Delete</button>"
-+
-"</div>";
-
-}
-
-document.getElementById("servers").innerHTML = list;
-
-}
-
 
 </script>
 
