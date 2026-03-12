@@ -2,37 +2,141 @@
 <html>
 <head>
 <title>FroxenMC Hosting</title>
+
+<style>
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+button{
+padding:10px;
+margin:5px;
+background:#00aa00;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.panel{
+display:none;
+}
+
+.server{
+border:1px solid white;
+margin:5px;
+padding:5px;
+}
+</style>
+
 </head>
 
-<body style="background:black;color:white;text-align:center">
+<body>
 
 <h1>FroxenMC Hosting</h1>
 
-<div id="home">
+<div id="login">
+
+<h2>Login</h2>
+
+<input id="user" placeholder="Username">
+<br><br>
+
 <button onclick="login()">Login</button>
+
 </div>
 
-<div id="panel" style="display:none">
+
+<div id="dashboard" class="panel">
+
 <h2>Dashboard</h2>
-<button onclick="create()">Create Server</button>
+
+<button onclick="showCreate()">Create Server</button>
 <button onclick="logout()">Logout</button>
-<p id="servers"></p>
+
+<h3>Your Servers</h3>
+
+<div id="servers"></div>
+
 </div>
+
+
+<div id="create" class="panel">
+
+<h2>Create Server</h2>
+
+<input id="sname" placeholder="Server name">
+<br><br>
+
+<button onclick="createServer()">Create</button>
+<button onclick="back()">Back</button>
+
+</div>
+
 
 <script>
 
+let servers = [];
+
 function login(){
-document.getElementById("home").style.display="none";
-document.getElementById("panel").style.display="block";
+document.getElementById("login").style.display="none";
+document.getElementById("dashboard").style.display="block";
 }
 
 function logout(){
-document.getElementById("home").style.display="block";
-document.getElementById("panel").style.display="none";
+document.getElementById("dashboard").style.display="none";
+document.getElementById("login").style.display="block";
 }
 
-function create(){
-document.getElementById("servers").innerHTML += "<br>Server created";
+function showCreate(){
+document.getElementById("dashboard").style.display="none";
+document.getElementById("create").style.display="block";
+}
+
+function back(){
+document.getElementById("create").style.display="none";
+document.getElementById("dashboard").style.display="block";
+}
+
+function createServer(){
+
+let name = document.getElementById("sname").value;
+
+if(name=="") return;
+
+servers.push(name);
+
+updateServers();
+
+back();
+
+}
+
+function deleteServer(i){
+
+servers.splice(i,1);
+
+updateServers();
+
+}
+
+function updateServers(){
+
+let list = "";
+
+for(let i=0;i<servers.length;i++){
+
+list += "<div class='server'>"
++ servers[i] +
+" <button onclick='deleteServer("+i+")'>Delete</button>"
++ "</div>";
+
+}
+
+document.getElementById("servers").innerHTML = list;
+
 }
 
 </script>
