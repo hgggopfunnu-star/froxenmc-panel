@@ -1,38 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FroxenMC Panel</title>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+/* ---------- LOGIN ---------- */
+
+#login {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- LAYOUT ---------- */
+
+#side {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 100vh;
+    background: #111827;
+    padding: 20px;
+}
+
+#side button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #1f2937;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+#side button:hover {
+    background: #374151;
+}
+
+/* ---------- MAIN ---------- */
+
+#main {
+    display: none;
+    margin-left: 220px;
+    padding: 20px;
+}
+
+/* ---------- PAGES ---------- */
+
+.page {
+    display: none;
+}
+
+#dashboard {
+    display: block;
+}
+
+.card {
+    background: #1f2937;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+</style>
+
+</head>
+<body>
+
+
+
+<!-- LOGIN -->
+
+<div id="login">
+
+    <div class="card">
+        <h2>FroxenMC Panel Login</h2>
+
+        <!-- Google button here -->
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-callback="handleCredentialResponse">
+        </div>
+
+        <div class="g_id_signin"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- SIDEBAR -->
+
+<div id="side">
+
+    <h3>Panel</h3>
+
+    <button onclick="page('dashboard')">Dashboard</button>
+    <button onclick="page('create')">Create Server</button>
+    <button onclick="page('account')">Account</button>
+
+</div>
+
+
+
+<!-- MAIN -->
+
+<div id="main">
+
+    <div id="dashboard" class="page">
+
+        <div class="card">
+            <h2>Dashboard</h2>
+            <p id="status">Checking backend...</p>
+        </div>
+
+    </div>
+
+
+    <div id="create" class="page">
+
+        <div class="card">
+            <h2>Create Server</h2>
+            <p>Coming soon</p>
+        </div>
+
+    </div>
+
+
+    <div id="account" class="page">
+
+        <div class="card">
+            <h2>Account</h2>
+            <p>User info later</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+
 <script>
 
 function handleCredentialResponse(response){
 
-document.getElementById("login").style.display="none";
-document.getElementById("side").style.display="block";
-document.getElementById("main").style.display="block";
+    document.getElementById("login").style.display = "none";
+    document.getElementById("side").style.display = "block";
+    document.getElementById("main").style.display = "block";
 
+    checkBackend();
 }
 
 
 function page(p){
 
-document.getElementById("dashboard").style.display="none";
-document.getElementById("create").style.display="none";
-document.getElementById("account").style.display="none";
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("create").style.display = "none";
+    document.getElementById("account").style.display = "none";
 
-document.getElementById(p).style.display="block";
+    document.getElementById(p).style.display = "block";
 
 }
 
 
 function checkBackend(){
 
-fetch("https://froxenmc-backend-production.up.railway.app/api/test")
-.then(r => r.json())
-.then(data => {
-document.getElementById("status").innerText =
-"Backend: " + data.status
-})
-.catch(() => {
-document.getElementById("status").innerText =
-"Backend offline"
-})
+    fetch("https://froxenmc-backend-production.up.railway.app/api/test")
+    .then(r => r.json())
+    .then(data => {
+
+        document.getElementById("status").innerText =
+            "Backend: " + data.status;
+
+    })
+    .catch(() => {
+
+        document.getElementById("status").innerText =
+            "Backend offline";
+
+    });
 
 }
 
 </script>
+
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</body>
+</html>
