@@ -1,167 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>FroxenMC Hosting</title>
-
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
-<style>
-
-body{
-background:#0e0e0e;
-color:white;
-font-family:Arial;
-margin:0;
-}
-
-.top{
-background:#111;
-padding:10px;
-}
-
-.side{
-width:200px;
-height:100vh;
-background:#151515;
-float:left;
-display:none;
-}
-
-.main{
-margin-left:200px;
-padding:20px;
-display:none;
-}
-
-button{
-background:#00aa55;
-border:none;
-padding:8px;
-color:white;
-cursor:pointer;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="top">
-FroxenMC Hosting Panel
-</div>
-
-
-<!-- LOGIN -->
-
-<div id="login" style="text-align:center;margin-top:50px;">
-
-<h2>Login with Google</h2>
-
-<div id="g_id_onload"
-data-client_id="265090568809-5rrmcfev60sqs3qmke5ot09e877ucgud.apps.googleusercontent.com"
-data-callback="handleCredentialResponse">
-</div>
-
-<div class="g_id_signin"></div>
-
-</div>
-
-
-
-<!-- SIDE -->
-
-<div class="side" id="side">
-
-<p>Menu</p>
-
-<button onclick="page('dashboard')">Dashboard</button>
-<br><br>
-
-<button onclick="page('create')">Create Server</button>
-<br><br>
-
-<button onclick="page('account')">Account</button>
-
-</div>
-
-
-
-<!-- MAIN -->
-
-<div class="main" id="main">
-
-
-<div id="dashboard">
-
-<h2>Dashboard</h2>
-
-<button onclick="checkBackend()">Check Backend</button>
-
-<p id="status">Not checked</p>
-
-</div>
-
-
-
-<div id="create" style="display:none">
-
-<h2>Create Server</h2>
-
-Name<br>
-<input>
-
-<br><br>
-
-RAM<br>
-
-<select>
-<option>1GB</option>
-<option>2GB</option>
-<option>4GB</option>
-</select>
-
-<br><br>
-
-Version<br>
-
-<select>
-<option>Paper</option>
-<option>Spigot</option>
-<option>Vanilla</option>
-</select>
-
-<br><br>
-
-<button>Create</button>
-
-</div>
-
-
-
-<div id="account" style="display:none">
-
-<h2>Account</h2>
-
-<p>Logged with Google</p>
-
-</div>
-
-
-</div>
-
-
-
 <script>
 
 function handleCredentialResponse(response){
 
+fetch("https://froxenmc-backend-production.up.railway.app/api/login", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+user: response.credential
+})
+})
+.then(r => r.json())
+.then(() => {
+
 document.getElementById("login").style.display="none";
-
 document.getElementById("side").style.display="block";
-
 document.getElementById("main").style.display="block";
+
+});
 
 }
 
@@ -200,7 +57,3 @@ document.getElementById("status").innerText =
 }
 
 </script>
-
-
-</body>
-</html>
