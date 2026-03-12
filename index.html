@@ -8,7 +8,10 @@
 
 <title>FroxenMC Panel</title>
 
+
 <style>
+
+/* ---------- BODY ---------- */
 
 body {
     margin: 0;
@@ -43,10 +46,10 @@ body {
 
 #side button {
     width: 100%;
-    margin-bottom: 10px;
     padding: 10px;
-    background: #1f2937;
+    margin-bottom: 10px;
     border: none;
+    background: #1f2937;
     color: white;
     cursor: pointer;
 }
@@ -86,18 +89,18 @@ body {
 }
 
 
-/* ---------- SERVER LIST ---------- */
+/* ---------- SERVER ---------- */
 
 .server {
     background: #111827;
-    padding: 12px;
+    padding: 10px;
     border-radius: 6px;
     margin-top: 10px;
 }
 
 .server button {
-    margin-right: 5px;
     padding: 6px 10px;
+    margin-right: 5px;
     border: none;
     background: #374151;
     color: white;
@@ -108,15 +111,27 @@ body {
     background: #4b5563;
 }
 
+
+/* ---------- INPUT ---------- */
+
+input {
+    width: 200px;
+    padding: 6px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
 </style>
 
 </head>
+
 
 <body>
 
 
 
-<!-- LOGIN -->
+<!-- ================= LOGIN ================= -->
 
 <div id="login">
 
@@ -138,7 +153,7 @@ body {
 
 
 
-<!-- SIDEBAR -->
+<!-- ================= SIDEBAR ================= -->
 
 <div id="side">
 
@@ -152,13 +167,13 @@ body {
 
 
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 
 <div id="main">
 
 
 
-    <!-- DASHBOARD -->
+    <!-- ===== DASHBOARD ===== -->
 
     <div id="dashboard" class="page">
 
@@ -173,39 +188,48 @@ body {
             <h2>Your Servers</h2>
 
             <div class="server">
-                <h3>Survival Server</h3>
+                <h3>Example Server</h3>
                 <p>Status: Offline</p>
                 <button>Start</button>
                 <button>Stop</button>
             </div>
 
-            <div class="server">
-                <h3>Test Server</h3>
-                <p>Status: Running</p>
-                <button>Start</button>
-                <button>Stop</button>
-            </div>
-
         </div>
 
     </div>
 
 
 
-    <!-- CREATE -->
+    <!-- ===== CREATE ===== -->
 
     <div id="create" class="page">
 
         <div class="card">
+
             <h2>Create Server</h2>
-            <p>Coming soon</p>
+
+            <label>Name</label><br>
+            <input id="srvName"><br><br>
+
+            <label>RAM</label><br>
+            <input id="srvRam" value="1024"><br><br>
+
+            <label>Version</label><br>
+            <input id="srvVersion" value="1.20.1"><br><br>
+
+            <button onclick="createServer()">
+                Create Server
+            </button>
+
+            <p id="createStatus"></p>
+
         </div>
 
     </div>
 
 
 
-    <!-- ACCOUNT -->
+    <!-- ===== ACCOUNT ===== -->
 
     <div id="account" class="page">
 
@@ -222,6 +246,8 @@ body {
 
 
 
+<!-- ================= SCRIPT ================= -->
+
 <script>
 
 
@@ -232,6 +258,7 @@ function handleCredentialResponse(response) {
     document.getElementById("main").style.display = "block";
 
     checkBackend();
+
 }
 
 
@@ -256,25 +283,78 @@ function checkBackend() {
 
     status.innerText = "Checking backend...";
 
-    fetch("https://froxenmc-backend-production.up.railway.app/api/test")
-        .then(r => r.json())
-        .then(data => {
+    fetch(
+        "https://froxenmc-backend-production.up.railway.app/api/test"
+    )
+    .then(r => r.json())
+    .then(data => {
 
-            status.innerText =
-                "Backend: " + data.status;
+        status.innerText =
+            "Backend: " + data.status;
 
-        })
-        .catch(() => {
+    })
+    .catch(() => {
 
-            status.innerText =
-                "Backend offline";
+        status.innerText =
+            "Backend offline";
 
-        });
+    });
+
+}
+
+
+
+function createServer() {
+
+    const name =
+        document.getElementById("srvName").value;
+
+    const ram =
+        document.getElementById("srvRam").value;
+
+    const version =
+        document.getElementById("srvVersion").value;
+
+    const status =
+        document.getElementById("createStatus");
+
+
+    status.innerText = "Creating...";
+
+
+    fetch(
+        "https://froxenmc-backend-production.up.railway.app/api/create",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name,
+                ram,
+                version
+            })
+        }
+    )
+    .then(r => r.json())
+    .then(data => {
+
+        status.innerText =
+            data.message;
+
+    })
+    .catch(() => {
+
+        status.innerText =
+            "Error";
+
+    });
 
 }
 
 
 </script>
+
 
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
