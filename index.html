@@ -2,23 +2,9 @@
 
 function handleCredentialResponse(response){
 
-fetch("https://froxenmc-backend-production.up.railway.app/api/login", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-user: response.credential
-})
-})
-.then(r => r.json())
-.then(() => {
-
 document.getElementById("login").style.display="none";
 document.getElementById("side").style.display="block";
 document.getElementById("main").style.display="block";
-
-});
 
 }
 
@@ -37,21 +23,14 @@ document.getElementById(p).style.display="block";
 function checkBackend(){
 
 fetch("https://froxenmc-backend-production.up.railway.app/api/test")
-
 .then(r => r.json())
-
 .then(data => {
-
 document.getElementById("status").innerText =
 "Backend: " + data.status
-
 })
-
 .catch(() => {
-
 document.getElementById("status").innerText =
 "Backend offline"
-
 })
 
 }
