@@ -70,7 +70,7 @@ data-callback="handleCredentialResponse">
 
 
 
-<!-- SIDE MENU -->
+<!-- SIDE -->
 
 <div class="side" id="side">
 
@@ -97,7 +97,9 @@ data-callback="handleCredentialResponse">
 
 <h2>Dashboard</h2>
 
-<p>Backend not connected yet</p>
+<button onclick="checkBackend()">Check Backend</button>
+
+<p id="status">Not checked</p>
 
 </div>
 
@@ -171,6 +173,29 @@ document.getElementById("create").style.display="none";
 document.getElementById("account").style.display="none";
 
 document.getElementById(p).style.display="block";
+
+}
+
+
+function checkBackend(){
+
+fetch("https://froxenmc-backend-production.up.railway.app/api/test")
+
+.then(r => r.json())
+
+.then(data => {
+
+document.getElementById("status").innerText =
+"Backend: " + data.status
+
+})
+
+.catch(() => {
+
+document.getElementById("status").innerText =
+"Backend offline"
+
+})
 
 }
 
