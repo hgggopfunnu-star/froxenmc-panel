@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -8,10 +7,7 @@
 
 <title>FroxenMC Panel</title>
 
-
 <style>
-
-/* ---------- BODY ---------- */
 
 body {
     margin: 0;
@@ -20,18 +16,12 @@ body {
     color: white;
 }
 
-
-/* ---------- LOGIN ---------- */
-
 #login {
     display: flex;
     height: 100vh;
     align-items: center;
     justify-content: center;
 }
-
-
-/* ---------- SIDEBAR ---------- */
 
 #side {
     display: none;
@@ -58,17 +48,11 @@ body {
     background: #374151;
 }
 
-
-/* ---------- MAIN ---------- */
-
 #main {
     display: none;
     margin-left: 240px;
     padding: 20px;
 }
-
-
-/* ---------- PAGES ---------- */
 
 .page {
     display: none;
@@ -78,18 +62,12 @@ body {
     display: block;
 }
 
-
-/* ---------- CARD ---------- */
-
 .card {
     background: #1f2937;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 15px;
 }
-
-
-/* ---------- SERVER ---------- */
 
 .server {
     background: #111827;
@@ -107,13 +85,6 @@ body {
     cursor: pointer;
 }
 
-.server button:hover {
-    background: #4b5563;
-}
-
-
-/* ---------- INPUT ---------- */
-
 input {
     width: 200px;
     padding: 6px;
@@ -123,18 +94,15 @@ input {
 }
 
 </style>
-
 </head>
 
 
 <body>
 
 
-
-<!-- ================= LOGIN ================= -->
+<!-- LOGIN -->
 
 <div id="login">
-
     <div class="card">
 
         <h2>FroxenMC Panel Login</h2>
@@ -148,12 +116,11 @@ input {
         <div class="g_id_signin"></div>
 
     </div>
-
 </div>
 
 
 
-<!-- ================= SIDEBAR ================= -->
+<!-- SIDEBAR -->
 
 <div id="side">
 
@@ -167,97 +134,91 @@ input {
 
 
 
-<!-- ================= MAIN ================= -->
+<!-- MAIN -->
 
 <div id="main">
 
 
+<!-- DASHBOARD -->
 
-    <!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="page">
 
-    <div id="dashboard" class="page">
-
-        <div class="card">
-            <h2>Dashboard</h2>
-            <p id="status">Checking backend...</p>
-        </div>
+<div class="card">
+<h2>Dashboard</h2>
+<p id="status">Checking backend...</p>
+</div>
 
 
-        <div class="card">
+<div class="card">
 
-            <h2>Your Servers</h2>
+<h2>Your Servers</h2>
 
-            <div class="server">
-                <h3>Example Server</h3>
-                <p>Status: Offline</p>
-                <button>Start</button>
-                <button>Stop</button>
-            </div>
+<div id="serverList"></div>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 
 
-    <!-- ===== CREATE ===== -->
+<!-- CREATE -->
 
-    <div id="create" class="page">
+<div id="create" class="page">
 
-        <div class="card">
+<div class="card">
 
-            <h2>Create Server</h2>
+<h2>Create Server</h2>
 
-            <label>Name</label><br>
-            <input id="srvName"><br><br>
+<label>Name</label><br>
+<input id="srvName"><br><br>
 
-            <label>RAM</label><br>
-            <input id="srvRam" value="1024"><br><br>
+<label>RAM</label><br>
+<input id="srvRam" value="1024"><br><br>
 
-            <label>Version</label><br>
-            <input id="srvVersion" value="1.20.1"><br><br>
+<label>Version</label><br>
+<input id="srvVersion" value="1.20.1"><br><br>
 
-            <button onclick="createServer()">
-                Create Server
-            </button>
+<button onclick="createServer()">
+Create Server
+</button>
 
-            <p id="createStatus"></p>
+<p id="createStatus"></p>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 
 
-    <!-- ===== ACCOUNT ===== -->
+<!-- ACCOUNT -->
 
-    <div id="account" class="page">
+<div id="account" class="page">
 
-        <div class="card">
-            <h2>Account</h2>
-            <p>User info later</p>
-        </div>
+<div class="card">
+<h2>Account</h2>
+<p>User info later</p>
+</div>
 
-    </div>
-
+</div>
 
 
 </div>
 
 
 
-<!-- ================= SCRIPT ================= -->
+<!-- SCRIPT -->
 
 <script>
 
 
-function handleCredentialResponse(response) {
+function handleCredentialResponse() {
 
     document.getElementById("login").style.display = "none";
     document.getElementById("side").style.display = "block";
     document.getElementById("main").style.display = "block";
 
     checkBackend();
+    loadServers();
 
 }
 
@@ -265,7 +226,7 @@ function handleCredentialResponse(response) {
 
 function page(p) {
 
-    const pages = ["dashboard", "create", "account"];
+    const pages = ["dashboard","create","account"];
 
     pages.forEach(id => {
         document.getElementById(id).style.display = "none";
@@ -304,6 +265,47 @@ function checkBackend() {
 
 
 
+function loadServers() {
+
+    const list =
+        document.getElementById("serverList");
+
+    list.innerHTML = "Loading...";
+
+    fetch(
+        "https://froxenmc-backend-production.up.railway.app/api/servers"
+    )
+    .then(r => r.json())
+    .then(data => {
+
+        list.innerHTML = "";
+
+        data.servers.forEach(s => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "server";
+
+            div.innerHTML =
+                "<h3>" + s.name + "</h3>" +
+                "<p>Status: " + s.status + "</p>" +
+                "<p>RAM: " + s.ram + "</p>" +
+                "<p>Version: " + s.version + "</p>" +
+
+                "<button onclick='startServer(\""+s.name+"\")'>Start</button>" +
+                "<button onclick='stopServer(\""+s.name+"\")'>Stop</button>";
+
+            list.appendChild(div);
+
+        });
+
+    });
+
+}
+
+
+
 function createServer() {
 
     const name =
@@ -325,28 +327,62 @@ function createServer() {
     fetch(
         "https://froxenmc-backend-production.up.railway.app/api/create",
         {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
             },
-            body: JSON.stringify({
+            body:JSON.stringify({
                 name,
                 ram,
                 version
             })
         }
     )
-    .then(r => r.json())
-    .then(data => {
+    .then(r=>r.json())
+    .then(data=>{
 
-        status.innerText =
-            data.message;
+        status.innerText = data.message;
+
+        loadServers();
 
     })
-    .catch(() => {
+    .catch(()=>{
 
-        status.innerText =
-            "Error";
+        status.innerText="Error";
+
+    });
+
+}
+
+
+
+function startServer(name){
+
+    fetch(
+        "https://froxenmc-backend-production.up.railway.app/api/start/"+name
+    )
+    .then(r=>r.json())
+    .then(data=>{
+
+        alert(data.message);
+        loadServers();
+
+    });
+
+}
+
+
+
+function stopServer(name){
+
+    fetch(
+        "https://froxenmc-backend-production.up.railway.app/api/stop/"+name
+    )
+    .then(r=>r.json())
+    .then(data=>{
+
+        alert(data.message);
+        loadServers();
 
     });
 
@@ -356,9 +392,7 @@ function createServer() {
 </script>
 
 
-
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-
 
 </body>
 </html>
